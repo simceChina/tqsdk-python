@@ -1,0 +1,32 @@
+name: Python package
+
+on:
+  push:
+    branches:
+      - test_action
+
+jobs:
+  test:
+    runs-on: [ubuntu-latest, windows-latest, macOS-latest]
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+    name: Python ${{ matrix.python-version }} test
+    steps:
+    - uses: actions/checkout@master
+    - name: Setup python
+      env:
+        PYTHONHASHSEED: 32
+        TZ: Asia/Shanghai
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install autodocsumm sphinx_rtd_theme jieba
+    - name: Test with pytest
+        run: |
+          pip install pytest
+          pytest
