@@ -1,16 +1,14 @@
 name: Python package
 
-on:
-  push:
-    branches:
-      - test_action
+on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
     name: Python ${{ matrix.python-version }} test
     steps:
     - uses: actions/checkout@master
